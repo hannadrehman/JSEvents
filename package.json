@@ -1,0 +1,29 @@
+{
+  "name": "jsevents",
+  "version": "1.0.0",
+  "description": "a small javascript library to create custom events",
+  "main": "dist/index.js",
+  "scripts": {
+    "start":"tsc ./src/**/*.ts --watch --outDir dist && lint:watch",
+    "lint": " esw src --color",
+    "lint:watch": "npm run lint --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hannadrehman/JSEvents.git"
+  },
+  "keywords": [
+    "javascript",
+    "JS",
+    "events",
+    "jsevents",
+    "custom",
+    "events"
+  ],
+  "author": "hannad rehman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hannadrehman/JSEvents/issues"
+  },
+  "homepage": "https://github.com/hannadrehman/JSEvents#readme"
+}
