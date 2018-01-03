@@ -2,10 +2,15 @@
 
 ## Installation
 
+### Browser
 download JSEvents.min.js and add to the sript in the ```head```
 tag of your web application.
 
 ``` <script type="text/javascript" src="path-to-JSevents.min.js">```
+### Node
+ ``` npm install jsevents-js```
+ ``` var JSEvents = require('jsevents-js');```
+
 # API
 
 # 1. addEventListener
