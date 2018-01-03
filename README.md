@@ -58,15 +58,14 @@ tag of your web application.
    */
    JSEvents.dispatchEvent(name,data)
   ```
-# 5. registeredEvents
+# 5. getRegisteredEvents
 ```
 /**
-   * @name registeredEvents
-   * @property
+   * @name getRegisteredEvents
    * @description this function return all the events registered in the store
    * @returns {object} this getter will return all the registered events
    */
-   var allEvents=JSEvents.registeredEvents
+   var allEvents=JSEvents.getRegisteredEvents()
 ```
 
 
@@ -86,7 +85,7 @@ tag of your web application.
         console.log(data)
     },
     getAll:function(){
-        console.log(JSEvents.registeredEvents)
+        console.log(JSEvents.getRegisteredEvents())
     }
     remove:function(){
       // all are mendatory

@@ -1,3 +1,21 @@
+type ICallback = ( evData: object, args: any ) => void;
+
+interface IEvent {
+  scope: object;
+  callback: ICallback;
+  args: any[];
+}
+
+interface IEventBus {
+  [key: string]: IEvent[];
+}
+
+interface IRawEvent {
+  name: string;
+  data: any[];
+  target: object;
+}
+
 /**
  * @class
  * @static
@@ -165,36 +183,30 @@
     }
   }
    /**
-   * @name registeredEvents
+   * @name getRegisteredEvents
    * @static
    * @method
    * @memberOf JSEvents
    * @description this function return all the events registered in the store
    * @returns {object} this getter will return all the registered events
    */
-  public static get registeredEvents():IEventBus {
+  public static getRegisteredEvents():IEventBus {
     return JSEvents.events;
   }
   private static events: IEventBus = {};
 }
-
-
-interface ICallback {
-  (evData: object, args:any):void;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+  module.exports = JSEvents;
+}
+else {
+  if (typeof define === 'function' && define.amd) {
+    define([], function() {
+      return JSEvents;
+    });
+  }
+  else {
+    window['JSEvents'] = JSEvents;
+  }
 }
 
- interface IEvent{
-  scope:object,
-  callback:ICallback,
-  args:any[]
-}
 
- interface IEventBus{
-  [key: string]:IEvent[]
-}
-
- interface IRawEvent{
-  name: string,
-  data: any[],
-  target: object
-}

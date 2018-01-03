@@ -1,5 +1,5 @@
 {
-  "name": "jsevents",
+  "name": "jsevents-js",
   "version": "1.0.0",
   "description": "a small javascript library to create custom events",
   "main": "dist/JSEvents.js",

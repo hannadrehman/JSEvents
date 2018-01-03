@@ -170,21 +170,30 @@ var JSEvents = /** @class */ (function () {
             console.warn("No event with name " + name + " exists in the JSEvents store");
         }
     };
-    Object.defineProperty(JSEvents, "registeredEvents", {
-        /**
-        * @name registeredEvents
-        * @static
-        * @method
-        * @memberOf JSEvents
-        * @description this function return all the events registered in the store
-        * @returns {object} this getter will return all the registered events
-        */
-        get: function () {
-            return JSEvents.events;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    /**
+    * @name getRegisteredEvents
+    * @static
+    * @method
+    * @memberOf JSEvents
+    * @description this function return all the events registered in the store
+    * @returns {object} this getter will return all the registered events
+    */
+    JSEvents.getRegisteredEvents = function () {
+        return JSEvents.events;
+    };
     JSEvents.events = {};
     return JSEvents;
 }());
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = JSEvents;
+}
+else {
+    if (typeof define === 'function' && define.amd) {
+        define([], function () {
+            return JSEvents;
+        });
+    }
+    else {
+        window['JSEvents'] = JSEvents;
+    }
+}
