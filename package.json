@@ -2,9 +2,10 @@
   "name": "jsevents",
   "version": "1.0.0",
   "description": "a small javascript library to create custom events",
-  "main": "dist/index.js",
+  "main": "dist/JSEvents.js",
   "scripts": {
-    "start":"tsc ./src/**/*.ts --watch --outDir dist && lint:watch",
+    "start": "tsc ./src/JSEvents.ts --watch --outDir dist && lint:watch && uglify",
+    "uglify":"uglifyjs ./dist/JSEvents.js --compress --mangle --output ./dist/JSEvents.min.js",
     "lint": " esw src --color",
     "lint:watch": "npm run lint --watch"
   },
@@ -25,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/hannadrehman/JSEvents/issues"
   },
-  "homepage": "https://github.com/hannadrehman/JSEvents#readme"
+  "homepage": "https://github.com/hannadrehman/JSEvents#readme",
+  "devDependencies": {
+    "typescript": "^2.6.2"
+  }
 }

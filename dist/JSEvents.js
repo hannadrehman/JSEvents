@@ -1,5 +1,3 @@
-"use strict";
-exports.__esModule = true;
 /**
  * @class
  * @static
@@ -24,14 +22,18 @@ var JSEvents = /** @class */ (function () {
     JSEvents.addEventListener = function (name, callback, scope) {
         // basic validation
         if (!name) {
-            throw new Error("An Event must have a valid name");
+            throw new Error('An Event must have a valid name');
         }
         if (!callback) {
-            throw new Error("An Event must have a valid callback function");
+            throw new Error('An Event must have a valid callback function');
+        }
+        if (!scope) {
+            throw new Error('An Event must have a valid scope');
         }
         // create dynamic arguments array
         var args = [];
-        for (var i = 0; i <= arguments.length; i++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (var i = 0; i < arguments.length; i++) {
             args.push(arguments[i]);
         }
         // if event is not present in our registry then add.key,
@@ -57,17 +59,20 @@ var JSEvents = /** @class */ (function () {
     JSEvents.removeEventListener = function (name, callback, scope) {
         // basic validation
         if (!name) {
-            throw new Error("An Event must have a valid name inorder to remove it");
+            throw new Error('An Event must have a valid name inorder to remove it');
         }
         if (!callback) {
-            throw new Error("An Event must have a valid callback function to remove it");
+            throw new Error('An Event must have a valid callback function to remove it');
+        }
+        if (!scope) {
+            throw new Error('An Event must have a valid scope');
         }
         // check if exists
         if (JSEvents.events[name]) {
             // new array to store filtered events
             var newArray = [];
             newArray = JSEvents.events[name].filter(function (current) {
-                return (!current.scope === scope || !current.callback === callback);
+                return (!(current.scope === scope) || !(current.callback === callback));
             });
             // replace the existing array with filtered array
             JSEvents.events[name] = newArray;
@@ -92,10 +97,10 @@ var JSEvents = /** @class */ (function () {
     JSEvents.hasEventListener = function (name, callback, scope) {
         // basic validation
         if (!name) {
-            throw new Error("An Event must have a valid name");
+            throw new Error('An Event must have a valid name');
         }
         if (!callback) {
-            throw new Error("An Event must have a valid callback function");
+            throw new Error('An Event must have a valid callback function');
         }
         // check if exists
         if (JSEvents.events[name]) {
@@ -106,7 +111,8 @@ var JSEvents = /** @class */ (function () {
                 var exists = false;
                 for (var _i = 0, _a = JSEvents.events[name]; _i < _a.length; _i++) {
                     var item = _a[_i];
-                    if (!item.scope === scope || !item.callback === callback) {
+                    // tslint:disable
+                    if ((item.scope === scope) && (item.callback === callback)) {
                         exists = true;
                         break;
                     }
@@ -114,6 +120,7 @@ var JSEvents = /** @class */ (function () {
                 return exists === true;
             }
         }
+        return false;
     };
     /**
      * @name dispatchEvent
@@ -122,20 +129,24 @@ var JSEvents = /** @class */ (function () {
      * @memberOf JSEvents
      * @param {string} name
      * @param {any} data
-     * @description this function check and return true/false if the event has
-     * any registered listener
+     * @description this function will fire the registered event
      * @returns {null} this function does not return anything
      */
     JSEvents.dispatchEvent = function (name, data) {
+        var args = [];
+        for (var i = 0; i < arguments.length; i++) {
+            args.push(arguments[i]);
+        }
+        args.splice(0, 1); //remove first argument
         // original event data
         var evData = {
-            data: data,
+            data: args,
             name: name,
-            scope: null
+            target: null
         };
         // basic validation
         if (!name) {
-            throw new Error("An Event must have a valid name");
+            throw new Error('An Event must have a valid name');
         }
         // check
         if (JSEvents.events[name]) {
@@ -145,10 +156,11 @@ var JSEvents = /** @class */ (function () {
                 // itrate over all listeners
                 for (var _i = 0, tempEvent_1 = tempEvent; _i < tempEvent_1.length; _i++) {
                     var ev = tempEvent_1[_i];
-                    evData.scope = ev.scope;
-                    if (ev.callback && typeof ev.callback === "function") {
+                    evData.target = ev.scope;
+                    var concatArgs = [evData].concat(args);
+                    if (ev.callback && typeof ev.callback === 'function') {
                         // fire
-                        ev.callback(evData, data);
+                        ev.callback.apply(evData, concatArgs);
                     }
                 }
             }
@@ -158,8 +170,21 @@ var JSEvents = /** @class */ (function () {
             console.warn("No event with name " + name + " exists in the JSEvents store");
         }
     };
+    Object.defineProperty(JSEvents, "registeredEvents", {
+        /**
+        * @name registeredEvents
+        * @static
+        * @method
+        * @memberOf JSEvents
+        * @description this function return all the events registered in the store
+        * @returns {object} this getter will return all the registered events
+        */
+        get: function () {
+            return JSEvents.events;
+        },
+        enumerable: true,
+        configurable: true
+    });
     JSEvents.events = {};
     return JSEvents;
 }());
-Object.defineProperty(window, "JSEvents", JSEvents);
-exports["default"] = JSEvents;

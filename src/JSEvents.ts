@@ -1,4 +1,3 @@
-import { ICallback, IEvent, IEventBus, IRawEvent } from "./Iindex";
 /**
  * @class
  * @static
@@ -7,7 +6,7 @@ import { ICallback, IEvent, IEventBus, IRawEvent } from "./Iindex";
  * object where you want to bind the JSEvents
  */
 
-class JSEvents {
+ class JSEvents {
   /**
    * @name addEventListener
    * @static
@@ -19,17 +18,21 @@ class JSEvents {
    * @description this function registeres the event
    * @returns {null} this function does not return anything
    */
-  public static addEventListener(name: string, callback: ICallback, scope: object): void {
+  public static addEventListener(name: string, callback: ICallback, scope: object ): void {
     // basic validation
     if (!name) {
-      throw new Error("An Event must have a valid name");
+      throw new Error('An Event must have a valid name');
     }
     if (!callback) {
-      throw new Error ("An Event must have a valid callback function");
+      throw new Error ('An Event must have a valid callback function');
+    }
+    if (!scope) {
+      throw new Error ('An Event must have a valid scope');
     }
     // create dynamic arguments array
     const args: any[] = [];
-    for (let i: number = 0; i <= arguments.length; i++) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let i: number = 0; i < arguments.length; i++) {
       args.push(arguments[i]);
     }
     // if event is not present in our registry then add.key,
@@ -51,20 +54,23 @@ class JSEvents {
    * @description this function will remove registered the event
    * @returns {null} this function does not return anything
    */
-  public static removeEventListener(name: string, callback: ICallback, scope: object): void {
+  public static removeEventListener(name: string, callback: ICallback, scope: object ): void {
     // basic validation
     if (!name) {
-      throw new Error("An Event must have a valid name inorder to remove it");
+      throw new Error('An Event must have a valid name inorder to remove it');
     }
     if (!callback) {
-      throw new Error ("An Event must have a valid callback function to remove it");
+      throw new Error ('An Event must have a valid callback function to remove it');
+    }
+    if (!scope) {
+      throw new Error ('An Event must have a valid scope');
     }
     // check if exists
     if (JSEvents.events[name]) {
       // new array to store filtered events
       let newArray: IEvent[] = [];
       newArray = JSEvents.events[name].filter(( current ) => {
-        return (!current.scope === scope || !current.callback === callback);
+        return (!(current.scope === scope) || !(current.callback === callback));
       });
       // replace the existing array with filtered array
       JSEvents.events[name] = newArray;
@@ -89,10 +95,10 @@ class JSEvents {
   public static hasEventListener(name: string, callback: ICallback, scope: object): boolean {
     // basic validation
     if (!name) {
-      throw new Error("An Event must have a valid name");
+      throw new Error('An Event must have a valid name');
     }
     if (!callback) {
-      throw new Error ("An Event must have a valid callback function");
+      throw new Error ('An Event must have a valid callback function');
     }
     // check if exists
     if (JSEvents.events[name]) {
@@ -101,7 +107,8 @@ class JSEvents {
       } else {
         let exists = false;
         for (const item of JSEvents.events[name]) {
-          if (!item.scope === scope || !item.callback === callback) {
+         // tslint:disable
+          if ((item.scope === scope) && (item.callback === callback)) {
             exists = true;
             break;
           }
@@ -109,6 +116,7 @@ class JSEvents {
         return exists === true;
       }
     }
+    return false;
   }
   /**
    * @name dispatchEvent
@@ -117,20 +125,24 @@ class JSEvents {
    * @memberOf JSEvents
    * @param {string} name
    * @param {any} data
-   * @description this function check and return true/false if the event has
-   * any registered listener
+   * @description this function will fire the registered event
    * @returns {null} this function does not return anything
    */
   public static dispatchEvent(name: string, data: any): void {
+    const args:any[]=[];
+    for (let i: number = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    args.splice(0,1); //remove first argument
     // original event data
     const evData: IRawEvent = {
-      data,
+      data:args,
       name,
-      scope: null,
+      target: null,
     };
     // basic validation
     if (!name) {
-      throw new Error("An Event must have a valid name");
+      throw new Error('An Event must have a valid name');
     }
     // check
     if (JSEvents.events[name]) {
@@ -139,10 +151,11 @@ class JSEvents {
         const tempEvent = JSEvents.events[name];
         // itrate over all listeners
         for (const ev of tempEvent) {
-          evData.scope = ev.scope;
-          if (ev.callback && typeof ev.callback === "function") {
+          evData.target = ev.scope;
+          const concatArgs= [evData].concat(args);
+          if (ev.callback && typeof ev.callback === 'function') {
             // fire
-            ev.callback(evData, data);
+            ev.callback.apply(evData, concatArgs);
           }
         }
       }
@@ -151,7 +164,37 @@ class JSEvents {
       console.warn(`No event with name ${name} exists in the JSEvents store`);
     }
   }
+   /**
+   * @name registeredEvents
+   * @static
+   * @method
+   * @memberOf JSEvents
+   * @description this function return all the events registered in the store
+   * @returns {object} this getter will return all the registered events
+   */
+  public static get registeredEvents():IEventBus {
+    return JSEvents.events;
+  }
   private static events: IEventBus = {};
 }
-Object.defineProperty(window, "JSEvents", JSEvents);
-export default JSEvents;
+
+
+interface ICallback {
+  (evData: object, args:any):void;
+}
+
+ interface IEvent{
+  scope:object,
+  callback:ICallback,
+  args:any[]
+}
+
+ interface IEventBus{
+  [key: string]:IEvent[]
+}
+
+ interface IRawEvent{
+  name: string,
+  data: any[],
+  target: object
+}
