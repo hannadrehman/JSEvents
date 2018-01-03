@@ -9,6 +9,8 @@ tag of your web application.
 ``` <script type="text/javascript" src="path-to-JSevents.min.js">```
 ### Node
  ``` npm install jsevents-js```
+
+ 
  ``` var JSEvents = require('jsevents-js');```
 
 # API
