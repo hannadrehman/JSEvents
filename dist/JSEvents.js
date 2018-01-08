@@ -171,13 +171,13 @@ var JSEvents = /** @class */ (function () {
         }
     };
     /**
-    * @name getRegisteredEvents
-    * @static
-    * @method
-    * @memberOf JSEvents
-    * @description this function return all the events registered in the store
-    * @returns {object} this getter will return all the registered events
-    */
+     * @name getRegisteredEvents
+     * @static
+     * @method
+     * @memberOf JSEvents
+     * @description this function return all the events registered in the store
+     * @returns {object} this getter will return all the registered events
+     */
     JSEvents.getRegisteredEvents = function () {
         return JSEvents.events;
     };

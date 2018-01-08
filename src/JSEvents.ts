@@ -182,7 +182,7 @@ interface IRawEvent {
       console.warn(`No event with name ${name} exists in the JSEvents store`);
     }
   }
-   /**
+  /**
    * @name getRegisteredEvents
    * @static
    * @method

@@ -1,13 +1,14 @@
 {
   "name": "jsevents-js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a small javascript library to create custom events",
   "main": "dist/JSEvents.js",
   "scripts": {
     "start": "tsc ./src/JSEvents.ts --watch --outDir dist && lint:watch && uglify",
-    "uglify":"uglifyjs ./dist/JSEvents.js --compress --mangle --output ./dist/JSEvents.min.js",
+    "uglify": "uglifyjs ./dist/JSEvents.js --compress --mangle --output ./dist/JSEvents.min.js",
     "lint": " esw src --color",
-    "lint:watch": "npm run lint --watch"
+    "lint:watch": "npm run lint --watch",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,25 @@
   },
   "homepage": "https://github.com/hannadrehman/JSEvents#readme",
   "devDependencies": {
-    "typescript": "^2.6.2"
-  }
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2",
+    "ts-jest": "^22.0.1"
+  },
+  "jest": {
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js"
+  ],
+  "transform": {
+    "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+  },
+  "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
+  },
+  "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text"
+    ]
 }
