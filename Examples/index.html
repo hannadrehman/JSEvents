@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>JSEVENTS DEMO</title>
+    <script src="libs/JSEvents.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <div style="width:60%;margin:auto">
+      <div style="margin-top:100px">
+        <h1 style="text-align:center">JSEvents</h1>
+      </div>
+      <section>
+        <input id="input" type="text" placeholder="text data for event"/>
+      </section>
+      <br>
+      <section>
+        <button id="bt1" onclick="addEv()">Add Event</button>
+        <button id="bt1" onclick="dispatchEv()">Dispatch Event</button>
+      </section>
+      <section>
+        <p id="results"></p>
+        <p >no of registered events called : <span id="callbacks">0</span></p>
+      </section>
+      <br>
+      <section>
+        <ul>
+          <li>
+            click Add Event to register an event
+          </li>
+          <li>
+             type any value in the text box that you want to pass
+             to the event when dispatched
+          </li>
+          <li>
+            click on Dispatch Event to fire the previously added event
+            with text box data
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
